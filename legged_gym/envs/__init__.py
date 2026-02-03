@@ -38,6 +38,8 @@ from .anymal_b.anymal_b_config import AnymalBRoughCfg, AnymalBRoughCfgPPO
 from .cassie.cassie import Cassie
 from .cassie.cassie_config import CassieRoughCfg, CassieRoughCfgPPO
 from .a1.a1_config import A1RoughCfg, A1RoughCfgPPO
+from .roll_robot.roll_robot_config import RollRobotCfg, RollRobotCfgPPO
+from .roll_robot.roll_robot_env import RollRobotEnv
 
 
 import os
@@ -49,3 +51,4 @@ task_registry.register( "anymal_c_flat", Anymal, AnymalCFlatCfg(), AnymalCFlatCf
 task_registry.register( "anymal_b", Anymal, AnymalBRoughCfg(), AnymalBRoughCfgPPO() )
 task_registry.register( "a1", LeggedRobot, A1RoughCfg(), A1RoughCfgPPO() )
 task_registry.register( "cassie", Cassie, CassieRoughCfg(), CassieRoughCfgPPO() )
+task_registry.register( "roll_robot_nav", RollRobotEnv,RollRobotCfg(), RollRobotCfgPPO() )

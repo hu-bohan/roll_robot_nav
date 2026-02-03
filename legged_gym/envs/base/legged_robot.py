@@ -334,7 +334,7 @@ class LeggedRobot(BaseTask):
         if self.cfg.domain_rand.push_robots and  (self.common_step_counter % self.cfg.domain_rand.push_interval == 0):
             self._push_robots()
 
-    def _resample_commands(self, env_ids):
+    def _resample_commands(self, env_ids):#这个函数的command是在一定范围内随机生成的，可能需要改一下
         """ Randommly select commands of some environments
 
         Args:
@@ -452,7 +452,7 @@ class LeggedRobot(BaseTask):
             self.command_ranges["lin_vel_x"][1] = np.clip(self.command_ranges["lin_vel_x"][1] + 0.5, 0., self.cfg.commands.max_curriculum)
 
 
-    def _get_noise_scale_vec(self, cfg):
+    def _get_noise_scale_vec(self, cfg):#我们是要改observation的，所以这里也要改
         """ Sets a vector used to scale the noise added to the observations.
             [NOTE]: Must be adapted when changing the observations structure
 

@@ -1,0 +1,1516 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This URDF was automatically created by SolidWorks to URDF Exporter! Originally created by Stephen Brawner (brawner@gmail.com) 
+     Commit Version: 1.6.0-4-g7f85cfe  Build Version: 1.6.7995.38578
+     For more information, please see http://wiki.ros.org/sw_urdf_exporter -->
+<robot
+  name="urdf3">
+  <link
+    name="base_link">
+    <inertial>
+      <origin
+        xyz="0.0 0.0011 0.00733"
+        rpy="0 0 0" />
+      <mass
+        value="5.43919" />
+      <inertia
+        ixx="0.048410923950000004"
+        ixy="-1.36e-09"
+        ixz="9.7e-10"
+        iyy="0.04502161036"
+        iyz="-0.00018424938000000002"
+        izz="0.08024033576999999" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/base_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.62745 0.62745 0.62745 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/base_link_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <link
+    name="hip1">
+    <inertial>
+      <origin
+        xyz="0.00449 0.0 -0.09351999999999999"
+        rpy="0 0 0" />
+      <mass
+        value="0.8326399999999999" />
+      <inertia
+        ixx="0.00136632693"
+        ixy="2.40542e-06"
+        ixz="4.3154430000000003e-05"
+        iyy="0.00084523844"
+        iyz="3.921e-07"
+        izz="0.0011430113" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hipdriver1"
+    type="revolute">
+    <origin
+      xyz="0.12771 0 -0.0367"
+      rpy="0 0 -0.00053763" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.571"
+      upper="1.571"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="thigh1">
+    <inertial>
+      <origin
+        xyz="0.02189 0.0 0.00779"
+        rpy="0 0 0" />
+      <mass
+        value="0.04356" />
+      <inertia
+        ixx="8.97068e-06"
+        ixy="6.84067e-06"
+        ixz="2.02198e-06"
+        iyy="4.08613e-05"
+        iyz="-0.00000e+00"
+        izz="4.88948e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.89804 0.91765 0.92941 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="thighdriver1"
+    type="revolute">
+    <origin
+      xyz="0.006 -0.0005 -0.1"
+      rpy="1.5708 -0.63246 0" />
+    <parent
+      link="hip1" />
+    <child
+      link="thigh1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.028"
+      upper="0.200"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="shank1">
+    <inertial>
+      <origin
+        xyz="0.08288 0.03158 -0.00063"
+        rpy="0 0 0" />
+      <mass
+        value="0.11366" />
+      <inertia
+        ixx="6.98037e-05"
+        ixy="-4.51047e-05"
+        ixz="1.55236e-06"
+        iyy="3.35536e-04"
+        iyz="8.36360e-07"
+        izz="3.03329e-04" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shankdriver1"
+    type="revolute">
+    <origin
+      xyz="0.1 0 -0.0001"
+      rpy="0 0 -1.6848" />
+    <parent
+      link="thigh1" />
+    <child
+      link="shank1" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.031"
+      upper="0.714"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="foot1">
+    <inertial>
+      <origin
+        xyz="-0.00101 0.0 0.0"
+        rpy="0 0 0" />
+      <mass
+        value="0.03547" />
+      <inertia
+        ixx="5.50741e-06"
+        ixy="0.0"
+        ixz="2.3e-10"
+        iyy="6.51837e-06"
+        iyz="0.0"
+        izz="6.49766e-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="footdriver1"
+    type="fixed" dont_collapse="true">
+    <origin
+      xyz="0.20046 0 -0.0005"
+      rpy="0 0 -0.63374" />
+    <parent
+      link="shank1" />
+    <child
+      link="foot1" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="hip2">
+    <inertial>
+      <origin
+        xyz="0.00449 0.0 -0.09351999999999999"
+        rpy="0 0 0" />
+      <mass
+        value="0.8326399999999999" />
+      <inertia
+        ixx="0.00136632693"
+        ixy="2.40542e-06"
+        ixz="4.3154430000000003e-05"
+        iyy="0.00084523844"
+        iyz="3.921e-07"
+        izz="0.0011430113" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hipdriver2"
+    type="revolute">
+    <origin
+      xyz="0.063854 0.1106 -0.0367"
+      rpy="0 0 1.0467" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.571"
+      upper="1.571"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="thigh2">
+    <inertial>
+      <origin
+        xyz="0.02189 0.0 0.00779"
+        rpy="0 0 0" />
+      <mass
+        value="0.04356" />
+      <inertia
+        ixx="8.97068e-06"
+        ixy="6.84067e-06"
+        ixz="2.02198e-06"
+        iyy="4.08613e-05"
+        iyz="-0.00000e+00"
+        izz="4.88948e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="thighdriver2"
+    type="revolute">
+    <origin
+      xyz="0.006 -0.0005 -0.1"
+      rpy="1.5708 -0.63246 0" />
+    <parent
+      link="hip2" />
+    <child
+      link="thigh2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.028"
+      upper="0.200"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="shank2">
+    <inertial>
+      <origin
+        xyz="0.08288 0.03158 -0.00063"
+        rpy="0 0 0" />
+      <mass
+        value="0.11366" />
+      <inertia
+        ixx="6.98037e-05"
+        ixy="-4.51047e-05"
+        ixz="1.55236e-06"
+        iyy="3.35536e-04"
+        iyz="8.36360e-07"
+        izz="3.03329e-04" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shankdriver2"
+    type="revolute">
+    <origin
+      xyz="0.1 0 0"
+      rpy="0 0 -1.6848" />
+    <parent
+      link="thigh2" />
+    <child
+      link="shank2" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.031"
+      upper="0.714"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="foot2">
+    <inertial>
+      <origin
+        xyz="-0.00101 0.0 0.0"
+        rpy="0 0 0" />
+      <mass
+        value="0.03547" />
+      <inertia
+        ixx="5.50741e-06"
+        ixy="0.0"
+        ixz="2.3e-10"
+        iyy="6.51837e-06"
+        iyz="0.0"
+        izz="6.49766e-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="footdriver2"
+    type="fixed" dont_collapse="true">
+    <origin
+      xyz="0.20046 0 -0.0006"
+      rpy="0 0 -0.63374" />
+    <parent
+      link="shank2" />
+    <child
+      link="foot2" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="hip3">
+    <inertial>
+      <origin
+        xyz="0.00449 0.0 -0.09351999999999999"
+        rpy="0 0 0" />
+      <mass
+        value="0.8326399999999999" />
+      <inertia
+        ixx="0.00136632693"
+        ixy="2.40542e-06"
+        ixz="4.3154430000000003e-05"
+        iyy="0.00084523844"
+        iyz="3.921e-07"
+        izz="0.0011430113" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hipdriver3"
+    type="revolute">
+    <origin
+      xyz="-0.063854 0.1106 -0.0367"
+      rpy="0 0 2.0939" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.571"
+      upper="1.571"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="thigh3">
+    <inertial>
+      <origin
+        xyz="0.02189 0.0 0.00779"
+        rpy="0 0 0" />
+      <mass
+        value="0.04356" />
+      <inertia
+        ixx="8.97068e-06"
+        ixy="6.84067e-06"
+        ixz="2.02198e-06"
+        iyy="4.08613e-05"
+        iyz="-0.00000e+00"
+        izz="4.88948e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="thighdriver3"
+    type="revolute">
+    <origin
+      xyz="0.00599999999999984 -0.000499999999999857 -0.0999999999999991"
+      rpy="1.5707963267949 -0.632458444294706 0" />
+    <parent
+      link="hip3" />
+    <child
+      link="thigh3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.028"
+      upper="0.200"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="shank3">
+    <inertial>
+      <origin
+        xyz="0.08288 0.03158 -0.00063"
+        rpy="0 0 0" />
+      <mass
+        value="0.11366" />
+      <inertia
+        ixx="6.98037e-05"
+        ixy="-4.51047e-05"
+        ixz="1.55236e-06"
+        iyy="3.35536e-04"
+        iyz="8.36360e-07"
+        izz="3.03329e-04" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shankdriver3"
+    type="revolute">
+    <origin
+      xyz="0.1 0 0"
+      rpy="0 0 -1.68476184492574" />
+    <parent
+      link="thigh3" />
+    <child
+      link="shank3" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.031"
+      upper="0.714"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="foot3">
+    <inertial>
+      <origin
+        xyz="-0.00101 0.0 0.0"
+        rpy="0 0 0" />
+      <mass
+        value="0.03547" />
+      <inertia
+        ixx="5.50741e-06"
+        ixy="0.0"
+        ixz="2.3e-10"
+        iyy="6.51837e-06"
+        iyz="0.0"
+        izz="6.49766e-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="footdriver3"
+    type="fixed" dont_collapse="true">
+    <origin
+      xyz="0.200460000000001 0 -0.000600000000000008"
+      rpy="0 0 -0.633742056586075" />
+    <parent
+      link="shank3" />
+    <child
+      link="foot3" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="hip4">
+    <inertial>
+      <origin
+        xyz="0.00449 0.0 -0.09351999999999999"
+        rpy="0 0 0" />
+      <mass
+        value="0.8326399999999999" />
+      <inertia
+        ixx="0.00136632693"
+        ixy="2.40542e-06"
+        ixz="4.3154430000000003e-05"
+        iyy="0.00084523844"
+        iyz="3.921e-07"
+        izz="0.0011430113" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hipdriver4"
+    type="revolute">
+    <origin
+      xyz="-0.12771 0 -0.0367"
+      rpy="0 0 3.1411" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip4" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.571"
+      upper="1.571"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="thigh4">
+    <inertial>
+      <origin
+        xyz="0.02189 0.0 0.00779"
+        rpy="0 0 0" />
+      <mass
+        value="0.04356" />
+      <inertia
+        ixx="8.97068e-06"
+        ixy="6.84067e-06"
+        ixz="2.02198e-06"
+        iyy="4.08613e-05"
+        iyz="-0.00000e+00"
+        izz="4.88948e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="thighdriver4"
+    type="revolute">
+    <origin
+      xyz="0.00599999999999981 -0.000499999999999968 -0.0999999999999991"
+      rpy="1.5707963267949 -0.632458444294706 0" />
+    <parent
+      link="hip4" />
+    <child
+      link="thigh4" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.028"
+      upper="0.200"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="shank4">
+    <inertial>
+      <origin
+        xyz="0.08288 0.03158 -0.00063"
+        rpy="0 0 0" />
+      <mass
+        value="0.11366" />
+      <inertia
+        ixx="6.98037e-05"
+        ixy="-4.51047e-05"
+        ixz="1.55236e-06"
+        iyy="3.35536e-04"
+        iyz="8.36360e-07"
+        izz="3.03329e-04" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.627450980392157 0.627450980392157 0.627450980392157 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shankdriver4"
+    type="revolute">
+    <origin
+      xyz="0.0999999999999978 0 -9.99999999999552E-05"
+      rpy="0 0 -1.68476184492575" />
+    <parent
+      link="thigh4" />
+    <child
+      link="shank4" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.031"
+      upper="0.714"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="foot4">
+    <inertial>
+      <origin
+        xyz="-0.00101 0.0 0.0"
+        rpy="0 0 0" />
+      <mass
+        value="0.03547" />
+      <inertia
+        ixx="5.50741e-06"
+        ixy="0.0"
+        ixz="2.3e-10"
+        iyy="6.51837e-06"
+        iyz="0.0"
+        izz="6.49766e-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="footdriver4"
+    type="fixed" dont_collapse="true">
+    <origin
+      xyz="0.20046 0 -0.000500000000000078"
+      rpy="0 0 -0.633742056586075" />
+    <parent
+      link="shank4" />
+    <child
+      link="foot4" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="hip5">
+    <inertial>
+      <origin
+        xyz="0.00449 0.0 -0.09351999999999999"
+        rpy="0 0 0" />
+      <mass
+        value="0.8326399999999999" />
+      <inertia
+        ixx="0.00136632693"
+        ixy="2.40542e-06"
+        ixz="4.3154430000000003e-05"
+        iyy="0.00084523844"
+        iyz="3.921e-07"
+        izz="0.0011430113" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hipdriver5"
+    type="revolute">
+    <origin
+      xyz="-0.063854 -0.1106 -0.0367"
+      rpy="0 0 -2.0949" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip5" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.571"
+      upper="1.571"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="thigh5">
+    <inertial>
+      <origin
+        xyz="0.02189 0.0 0.00779"
+        rpy="0 0 0" />
+      <mass
+        value="0.04356" />
+      <inertia
+        ixx="8.97068e-06"
+        ixy="6.84067e-06"
+        ixz="2.02198e-06"
+        iyy="4.08613e-05"
+        iyz="-0.00000e+00"
+        izz="4.88948e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="thighdriver5"
+    type="revolute">
+    <origin
+      xyz="0.00599999999999973 -0.000500000000000311 -0.0999999999999993"
+      rpy="1.5707963267949 -0.632458444294705 0" />
+    <parent
+      link="hip5" />
+    <child
+      link="thigh5" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.028"
+      upper="0.200"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="shank5">
+    <inertial>
+      <origin
+        xyz="0.08288 0.03158 -0.00063"
+        rpy="0 0 0" />
+      <mass
+        value="0.11366" />
+      <inertia
+        ixx="6.98037e-05"
+        ixy="-4.51047e-05"
+        ixz="1.55236e-06"
+        iyy="3.35536e-04"
+        iyz="8.36360e-07"
+        izz="3.03329e-04" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shankdriver5"
+    type="revolute">
+    <origin
+      xyz="0.0999999999999983 0 -0.000100000000000827"
+      rpy="0 0 -1.68476184492574" />
+    <parent
+      link="thigh5" />
+    <child
+      link="shank5" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.031"
+      upper="0.714"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="foot5">
+    <inertial>
+      <origin
+        xyz="-0.00101 0.0 0.0"
+        rpy="0 0 0" />
+      <mass
+        value="0.03547" />
+      <inertia
+        ixx="5.50741e-06"
+        ixy="0.0"
+        ixz="2.3e-10"
+        iyy="6.51837e-06"
+        iyz="0.0"
+        izz="6.49766e-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="footdriver5"
+    type="fixed" dont_collapse="true">
+    <origin
+      xyz="0.20046 0 -0.000499999999999148"
+      rpy="0 0 -0.633742056586076" />
+    <parent
+      link="shank5" />
+    <child
+      link="foot5" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+  <link
+    name="hip6">
+    <inertial>
+      <origin
+        xyz="0.00449 0.0 -0.09351999999999999"
+        rpy="0 0 0" />
+      <mass
+        value="0.8326399999999999" />
+      <inertia
+        ixx="0.00136632693"
+        ixy="2.40542e-06"
+        ixz="4.3154430000000003e-05"
+        iyy="0.00084523844"
+        iyz="3.921e-07"
+        izz="0.0011430113" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/hip1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="hipdriver6"
+    type="revolute">
+    <origin
+      xyz="0.0638540649243256 -0.110598484718737 -0.0367"
+      rpy="0 0 -1.0477351856311" />
+    <parent
+      link="base_link" />
+    <child
+      link="hip6" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.571"
+      upper="1.571"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="thigh6">
+    <inertial>
+      <origin
+        xyz="0.02189 0.0 0.00779"
+        rpy="0 0 0" />
+      <mass
+        value="0.04356" />
+      <inertia
+        ixx="8.97068e-06"
+        ixy="6.84067e-06"
+        ixz="2.02198e-06"
+        iyy="4.08613e-05"
+        iyz="-0.00000e+00"
+        izz="4.88948e-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.898039215686275 0.917647058823529 0.929411764705882 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/thigh1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="thighdriver6"
+    type="revolute">
+    <origin
+      xyz="0.00599999999999973 -0.000500000000000311 -0.0999999999999993"
+      rpy="1.5707963267949 -0.632458444294705 0" />
+    <parent
+      link="hip6" />
+    <child
+      link="thigh6" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-2.028"
+      upper="0.200"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="shank6">
+    <inertial>
+      <origin
+        xyz="0.08288 0.03158 -0.00063"
+        rpy="0 0 0" />
+      <mass
+        value="0.11366" />
+      <inertia
+        ixx="6.98037e-05"
+        ixy="-4.51047e-05"
+        ixz="1.55236e-06"
+        iyy="3.35536e-04"
+        iyz="8.36360e-07"
+        izz="3.03329e-04" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.627450980392157 0.627450980392157 0.627450980392157 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/shank1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="shankdriver6"
+    type="revolute">
+    <origin
+      xyz="0.0999999999999983 0 -0.000100000000000827"
+      rpy="0 0 -1.68476184492574" />
+    <parent
+      link="thigh6" />
+    <child
+      link="shank6" />
+    <axis
+      xyz="0 0 1" />
+    <limit
+      lower="-1.031"
+      upper="0.714"
+      effort="12.0"
+      velocity="25.0" />
+    <dynamics
+      damping="0.1"
+      friction="0" />
+  </joint>
+  <link
+    name="foot6">
+    <inertial>
+      <origin
+        xyz="-0.00101 0.0 0.0"
+        rpy="0 0 0" />
+      <mass
+        value="0.03547" />
+      <inertia
+        ixx="5.50741e-06"
+        ixy="0.0"
+        ixz="2.3e-10"
+        iyy="6.51837e-06"
+        iyz="0.0"
+        izz="6.49766e-06" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="1 1 1 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/foot1_simplify.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="footdriver6"
+    type="fixed" dont_collapse="true">
+    <origin
+      xyz="0.20046 0 -0.000500000000005987"
+      rpy="0 0 -0.633742056586075" />
+    <parent
+      link="shank6" />
+    <child
+      link="foot6" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+<link
+    name="imu_link">
+    <inertial>
+      <origin
+        xyz="4.4595E-35 -9.1953E-19 0.015385"
+        rpy="0 0 0" />
+      <mass
+        value="0.055543" />
+      <inertia
+        ixx="5.4182E-05"
+        ixy="-2.1347E-37"
+        ixz="-2.9711E-37"
+        iyy="5.4182E-05"
+        iyz="1.9316E-21"
+        izz="9.2501E-05" />
+    </inertial>
+    <visual>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/imu_link.STL" />
+      </geometry>
+      <material
+        name="">
+        <color
+          rgba="0.90196 0.80784 0.50588 1" />
+      </material>
+    </visual>
+    <collision>
+      <origin
+        xyz="0 0 0"
+        rpy="0 0 0" />
+      <geometry>
+        <mesh
+          filename="../meshes/imu_link.STL" />
+      </geometry>
+    </collision>
+  </link>
+  <joint
+    name="imufixdriver"
+    type="fixed" dont_collapse="true">
+    <origin
+      xyz="0 0 -0.05"
+      rpy="0 0 0" />
+    <parent
+      link="base_link" />
+    <child
+      link="imu_link" />
+    <axis
+      xyz="0 0 0" />
+  </joint>
+</robot>
