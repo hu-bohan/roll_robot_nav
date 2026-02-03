@@ -5,7 +5,7 @@ class RollRobotCfg(LeggedRobotCfg):
     class init_state(LeggedRobotCfg.init_state):
         pos = [0.0, 0.0, 0.3] # x,y,z [m]
 
-         default_joint_angles = {  # = target angles [rad] when action = 0.0
+        default_joint_angles = {  # = target angles [rad] when action = 0.0
             'hipdriver1': 0.,
             'hipdriver2': 0.,
             'hipdriver3': 0.,
@@ -30,8 +30,8 @@ class RollRobotCfg(LeggedRobotCfg):
 
         default_joint_pos= [value for key, value in default_joint_angles.items()]
     
-     class asset(LeggedRobotCfg.asset):
-        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/roll_robot_r/urdf/roll_robot_r.urdf'
+    class asset(LeggedRobotCfg.asset):
+        file = '{LEGGED_GYM_ROOT_DIR}/resources/robots/roll_robot/urdf/roll_robot_r.urdf'
         name = "roll_robot"
         foot_name = "foot"
         hip_name = "hip"
@@ -61,6 +61,11 @@ class RollRobotCfg(LeggedRobotCfg):
         }     # [N*m]
         action_scale = 1.0
         decimation = 4
+
+    class env(LeggedRobotCfg.env):
+        num_envs = 64
+        num_actions = 18  #TODO 这里在修改输出为high level commands以后要改为3
+        num_observations = 253
 
 class RollRobotCfgPPO(LeggedRobotCfgPPO):
     class runner(LeggedRobotCfgPPO.runner):
