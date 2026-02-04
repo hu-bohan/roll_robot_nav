@@ -64,6 +64,14 @@ class RollRobotCfg(LeggedRobotCfg):
         action_scale = 1.0
         decimation = 4
 
+
+    class commands(LeggedRobotCfg.commands):
+        # 这些范围将用于将上层网络的输出 [-1, 1] 映射到实际速度
+        class ranges:
+            lin_vel_x = [-0.5, 0.5] # m/s
+            lin_vel_y = [-0.5, 0.5] # m/s
+            ang_vel_yaw = [-1.0, 1.0] # rad/s
+
     class normalization(LeggedRobotCfg.normalization):
         class obs_scales(LeggedRobotCfg.normalization.obs_scales):
             lin_vel = 1.0
@@ -77,10 +85,8 @@ class RollRobotCfg(LeggedRobotCfg):
 
     class env(LeggedRobotCfg.env):
         num_envs = 64
-        num_actions = 18  #TODO 这里在修改输出为high level commands以后要改为3
-        # TODO 更新观测维度：深度图像素数 + 目标向量(3) + 自身状态等
-        num_observations = 253# TODO 这里只是举例,等正式确定观测维度以后记得修改
-
+        num_actions = 3  
+        num_observations = 131  # 128 (扫描线) + 3 (目标点向量) = 131
     
     #新添加的类
     class camera:
