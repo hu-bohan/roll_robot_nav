@@ -87,6 +87,10 @@ class RollRobotCfg(LeggedRobotCfg):
         num_envs = 64
         num_actions = 3  
         num_observations = 131  # 128 (扫描线) + 3 (目标点向量) = 131
+
+    class domain_rand(LeggedRobotCfg.domain_rand):
+        randomize_motor_offset = False
+        push_robots = False
     
     #新添加的类
     class camera:

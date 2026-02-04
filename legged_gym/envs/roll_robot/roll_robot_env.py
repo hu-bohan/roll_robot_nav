@@ -1,5 +1,5 @@
 from legged_gym.envs.base.legged_robot import LeggedRobot
-from legged_gym.utils.math import quat_rotate_inverse, normalize
+from isaacgym.torch_utils import quat_rotate_inverse, normalize
 from legged_gym import LEGGED_GYM_ROOT_DIR
 import os
 import torch
@@ -9,9 +9,9 @@ from . import observations
 
 class RollRobotEnv(LeggedRobot):
     def __init__(self, cfg, sim_params, physics_engine, sim_device, headless):
-        super().__init__(cfg, sim_params, physics_engine, sim_device, headless)
         self.camera_handles = []
         self.camera_tensors = [] 
+        super().__init__(cfg, sim_params, physics_engine, sim_device, headless)
 
         self.nav_obs_buf = torch.zeros(self.num_envs, self.cfg.env.num_observations, device=self.device)# 这里的 nav_obs_buf 专门存上层的观测
 
@@ -21,7 +21,7 @@ class RollRobotEnv(LeggedRobot):
 
 
         # 1. 加载下层网络
-        self.locomotion_agent = torch.jit.load('logs/locomotion.pt').to(self.device) 
+        self.locomotion_agent = torch.jit.load('low_level_network/locomotion.pt').to(self.device) 
         self.locomotion_agent.eval() # 必须设为 eval 模式
 
         # 初始化用于下层输入的 Buffer
@@ -41,6 +41,7 @@ class RollRobotEnv(LeggedRobot):
         camera_props.width = self.cfg.camera.width
         camera_props.height = self.cfg.camera.height
         camera_props.enable_tensors = True # 开启 GPU Tensor 加速
+        camera_props.horizontal_fov = self.cfg.camera.horizontal_fov
         camera_props.horizontal_fov = self.cfg.camera.horizontal_fov
 
          # 定义安装位置的变换 (相对于绑定的 Body)
@@ -248,6 +249,14 @@ class RollRobotEnv(LeggedRobot):
         # 在重置时，随机生成新目标
         # 比如在机器人当前位置周围 3-5米 范围内生成
         self._resample_targets(env_ids)
+
+    def _resample_commands(self, env_ids):
+        """
+        重写父类的方法。
+        导航任务不需要随机采样“目标速度”，因为速度是由上层策略输出的。
+        重置时我们将 commands 归零即可。
+        """
+        self.commands[env_ids] = 0.
 
     def _resample_targets(self, env_ids): 
         # 随机半径 [3, 5]
