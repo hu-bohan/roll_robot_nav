@@ -2,6 +2,8 @@ from legged_gym.envs.base.legged_robot_config import LeggedRobotCfg, LeggedRobot
 from legged_gym import LEGGED_GYM_ROOT_DIR
 
 class RollRobotCfg(LeggedRobotCfg):
+
+    #对已有类进行修改
     class init_state(LeggedRobotCfg.init_state):
         pos = [0.0, 0.0, 0.3] # x,y,z [m]
 
@@ -62,10 +64,33 @@ class RollRobotCfg(LeggedRobotCfg):
         action_scale = 1.0
         decimation = 4
 
+    class normalization(LeggedRobotCfg.normalization):
+        class obs_scales(LeggedRobotCfg.normalization.obs_scales):
+            lin_vel = 1.0
+            ang_vel = 0.1
+            dof_pos = 1.0
+            dof_vel = 0.1
+            height_measurements = 1.0
+        
+        clip_observations = 10.
+        clip_actions = 1.
+
     class env(LeggedRobotCfg.env):
         num_envs = 64
         num_actions = 18  #TODO 这里在修改输出为high level commands以后要改为3
-        num_observations = 253
+        # TODO 更新观测维度：深度图像素数 + 目标向量(3) + 自身状态等
+        num_observations = 253# TODO 这里只是举例,等正式确定观测维度以后记得修改
+
+    
+    #新添加的类
+    class camera:
+        # Realsense D435 参数
+        width = 128 # 1.分辨率
+        height = 72
+        horizontal_fov = 85.2 # 2.视场角 
+        position = [0.3, 0.0, 0.2]   # 3. 安装位置 (相对于 base_link) [x, y, z]
+        rotation = [0.0, 0.0, 0.0] # 4. 安装角度 [roll, pitch, yaw] (弧度)
+
 
 class RollRobotCfgPPO(LeggedRobotCfgPPO):
     class runner(LeggedRobotCfgPPO.runner):
