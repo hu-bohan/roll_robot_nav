@@ -190,7 +190,7 @@ class LeggedRobotCfg(BaseConfig):
             num_threads = 10
             solver_type = 1  # 0: pgs, 1: tgs
             num_position_iterations = 4
-            num_velocity_iterations = 0
+            num_velocity_iterations = 1#改过了，改之前是0
             contact_offset = 0.01  # [m]
             rest_offset = 0.0   # [m]
             bounce_threshold_velocity = 0.5 #0.5 [m/s]

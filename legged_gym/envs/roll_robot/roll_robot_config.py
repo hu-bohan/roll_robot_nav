@@ -43,6 +43,7 @@ class RollRobotCfg(LeggedRobotCfg):
         penalize_contacts_on = ["shank"]
         penalize_self_collision = ["hip", "thigh"]
         terminate_after_contacts_on = ["base_link"]
+        flip_visual_attachments = False
 
     class control(LeggedRobotCfg.control):
         control_type = 'P'
@@ -88,9 +89,35 @@ class RollRobotCfg(LeggedRobotCfg):
         num_actions = 3  
         num_observations = 131  # 128 (扫描线) + 3 (目标点向量) = 131
 
+    class terrain(LeggedRobotCfg.terrain):
+        mesh_type = 'plane'
+        static_friction =1.0
+        dynamic_friction = 1.0
+
     class domain_rand(LeggedRobotCfg.domain_rand):
         randomize_motor_offset = False
         push_robots = False
+
+    class rewards(LeggedRobotCfg.rewards):
+        # 定义需要保留的奖励项
+        class scales:
+            termination = -0.0
+            tracking_lin_vel = 0.0
+            tracking_ang_vel = 0.0
+            lin_vel_z = -0.0
+            ang_vel_xy = -0.0
+            orientation = -0.0
+            torques = -0.0
+            dof_vel = -0.0
+            dof_acc = -0.0
+            base_height = -0.0 
+            feet_air_time =  0.0
+            collision = -0.0
+            feet_stumble = -0.0 
+            action_rate = -0.0
+            stand_still = -0.0
+        
+        only_positive_rewards = False
     
     #新添加的类
     class camera:
