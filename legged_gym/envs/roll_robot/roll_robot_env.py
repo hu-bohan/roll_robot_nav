@@ -11,7 +11,14 @@ class RollRobotEnv(LeggedRobot):
     def __init__(self, cfg, sim_params, physics_engine, sim_device, headless):
         self.camera_handles = []
         self.camera_tensors = [] 
+
+        # === 下层网络历史 Buffer ===
+        self.history_len = 8  # 历史观测堆叠层数
+        self.low_level_obs_dim = 63 # 单帧观测维度
+
         super().__init__(cfg, sim_params, physics_engine, sim_device, headless)
+
+        self.obs_history_buf = torch.zeros(self.cfg.env.num_envs, self.history_len, self.low_level_obs_dim, device=sim_device, dtype=torch.float)
 
         self.nav_obs_buf = torch.zeros(self.num_envs, self.cfg.env.num_observations, device=self.device)# 这里的 nav_obs_buf 专门存上层的观测
 
@@ -123,11 +130,18 @@ class RollRobotEnv(LeggedRobot):
         # 在这里，我们需要传入“上一次下层网络输出的电机指令”
         # 所以我们需要维护一个 self.last_actions_for_low_level
         
-        student_obs = torch.concat((
+        current_obs = torch.concat((
             obs_real_time,
             self.last_actions_for_low_level, # 使用手动维护的上一帧动作
             observations.obs_commands(self), # 读取刚刚更新的 self.commands
         ), dim=-1)
+
+        self.obs_history_buf = torch.cat((
+            self.obs_history_buf[:, 1:], # 丢弃最旧的一帧
+            current_obs.unsqueeze(1)     # 加入最新的一帧
+        ), dim=1)
+
+        student_obs = self.obs_history_buf.view(self.num_envs, -1)
 
         # --- 3. 下层网络推理 ---
         with torch.no_grad():
