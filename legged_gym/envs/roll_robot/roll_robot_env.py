@@ -1,10 +1,11 @@
 from legged_gym.envs.base.legged_robot import LeggedRobot
-from isaacgym.torch_utils import quat_rotate_inverse, normalize,to_torch,get_axis_params
+from isaacgym.torch_utils import quat_rotate_inverse, normalize, to_torch, get_axis_params
 from legged_gym import LEGGED_GYM_ROOT_DIR
 import os
 import torch
 import numpy as np
 from isaacgym import gymapi, gymtorch
+from isaacgym import gymutil
 from . import observations
 
 class RollRobotEnv(LeggedRobot):
@@ -58,10 +59,7 @@ class RollRobotEnv(LeggedRobot):
         # 获取完整的 tensor (包含障碍物)
         self.root_states = gymtorch.wrap_tensor(actor_root_state)
         # 记录每环境的总 Actor 数 (机器人+障碍物)，用于 reset_idx
-        self.actors_per_env = self.root_states.shape[0] // self.num_envs
-        # 【关键】立刻只保留前 num_envs 个数据 (即只保留机器人)
-        # 这样后面所有的计算 (重力、速度等) 就都正常了
-        self.root_states = self.root_states[:self.num_envs]
+        self.actors_per_env = self.root_states.shape[0] // self.num_envs #TODO 如果报错，这里可以改称硬编码，改成“每个环境的障碍物数量+1”
 
         # 3. 处理 DOF (障碍物没有关节，所以不用切)
         self.dof_state = gymtorch.wrap_tensor(dof_state_tensor)
@@ -69,22 +67,21 @@ class RollRobotEnv(LeggedRobot):
         self.dof_vel = self.dof_state.view(self.num_envs, self.num_dofs, 2)[..., 1]
         
         # 4. 初始化基于 root_states 的视图
-        self.base_quat = self.root_states[:, 3:7]
-        self.base_lin_vel = self.root_states[:, 7:10]
-        self.base_ang_vel = self.root_states[:, 10:13]
+        self.base_quat = self.root_states[:self.num_envs, 3:7]
+        self.base_lin_vel = self.root_states[:self.num_envs, 7:10]
+        self.base_ang_vel = self.root_states[:self.num_envs, 10:13]
 
         # 5. 处理接触力
-        # 原始数据可能包含障碍物的接触力，我们只取机器人的 Body
-        self.contact_forces = gymtorch.wrap_tensor(net_contact_forces).view(self.num_envs, -1, 3)
-        # 【关键】只取前 num_bodies 个 body (属于机器人的)
-        self.contact_forces = self.contact_forces[:, :self.num_bodies, :]
+        contact_forces = gymtorch.wrap_tensor(net_contact_forces)
+        robot_contact_forces = contact_forces[:self.num_envs * self.num_bodies,:]
+        self.contact_forces = robot_contact_forces.view(self.num_envs,self.num_bodies,3)
 
         # 6. 初始化通用 Buffer
         self.common_step_counter = 0
         self.extras = {}
         self.noise_scale_vec = self._get_noise_scale_vec(self.cfg)
         self.gravity_vec = to_torch(get_axis_params(-1., self.up_axis_idx), device=self.device).repeat((self.num_envs, 1))
-        self.forward_vec = torch.tensor([1., 0., 0.], device=self.device, dtype=torch.float)
+        self.forward_vec = torch.tensor([1., 0., 0.], device=self.device, dtype=torch.float).repeat((self.num_envs, 1))
         self.torques = torch.zeros(self.num_envs, self.num_dofs, dtype=torch.float, device=self.device, requires_grad=False)
         
         # === 核心修改点 B：物理 Buffer 使用 num_dofs (18) 而非 num_actions (3) ===
@@ -93,8 +90,18 @@ class RollRobotEnv(LeggedRobot):
         self.actions = torch.zeros(self.num_envs, self.num_dofs, dtype=torch.float, device=self.device, requires_grad=False)
         self.last_actions = torch.zeros(self.num_envs, self.num_dofs, dtype=torch.float, device=self.device, requires_grad=False)
         self.last_dof_vel = torch.zeros(self.num_envs, self.num_dofs, dtype=torch.float, device=self.device, requires_grad=False)
+        self.last_root_vel = torch.zeros(self.num_envs, 6, dtype=torch.float, device=self.device, requires_grad=False)
+        self.last_contacts = torch.zeros(self.num_envs, len(self.feet_indices), dtype=torch.bool, device=self.device, requires_grad=False)
+        self.commands = torch.zeros(self.num_envs, self.cfg.commands.num_commands, dtype=torch.float, device=self.device, requires_grad=False)
+        self.commands_scale = torch.tensor(
+            [self.obs_scales.lin_vel, self.obs_scales.lin_vel, self.obs_scales.ang_vel], 
+            device=self.device, 
+            requires_grad=False,)
         self.joint_pos_target = torch.zeros(self.num_envs, self.num_dofs, dtype=torch.float, device=self.device, requires_grad=False)
         self.joint_vel_target = torch.zeros(self.num_envs, self.num_dofs, dtype=torch.float, device=self.device, requires_grad=False)
+        if self.cfg.terrain.measure_heights:
+            self.height_points = self._init_height_points()
+        self.measured_heights = 0
 
         # 7. 初始化奖励/观测 Buffer
         self.obs_buf = torch.zeros(self.num_envs, self.num_obs, device=self.device, dtype=torch.float)
@@ -113,7 +120,7 @@ class RollRobotEnv(LeggedRobot):
         
         # 9. 计算重力投影 (现在不会报错了，因为 base_quat 和 gravity_vec 维度匹配)
         from isaacgym.torch_utils import quat_rotate_inverse
-        self.projected_gravity = quat_rotate_inverse(self.base_quat, self.gravity_vec.repeat((self.num_envs, 1)))
+        self.projected_gravity = quat_rotate_inverse(self.base_quat, self.gravity_vec)
         self.heights = torch.zeros(self.num_envs, self.num_obs, dtype=torch.float, device=self.device, requires_grad=False)
 
         # 10. 初始化 PD Gain
@@ -137,6 +144,7 @@ class RollRobotEnv(LeggedRobot):
         self.default_dof_pos = self.default_dof_pos.unsqueeze(0)
 
     def reset_idx(self, env_ids):
+        # print(f"Resetting envs: {env_ids}") #TODO 这是测试用的，没问题了记得删掉
         if len(env_ids) == 0:
             return
 
@@ -146,7 +154,7 @@ class RollRobotEnv(LeggedRobot):
         self._resample_targets(env_ids)
 
         # 2. 计算机器人的全局索引
-        robot_indices = env_ids * self.actors_per_env
+        robot_indices = env_ids
         
         # 3. 更新内存状态
         # 但我们用 robot_indices 只修改了其中的机器人行
@@ -163,6 +171,13 @@ class RollRobotEnv(LeggedRobot):
             gymtorch.unwrap_tensor(robot_indices.to(dtype=torch.int32)),
             len(env_ids)
         )
+
+        self.contact_forces[env_ids] = 0
+        self.episode_length_buf[env_ids] = 0
+        self.last_actions_for_low_level[env_ids] = 0
+        self.obs_history_buf[env_ids] = 0
+        self.reset_buf[env_ids] = 0
+        self.last_contacts[env_ids] = False
 
     def _create_envs(self):
         """
@@ -182,7 +197,7 @@ class RollRobotEnv(LeggedRobot):
         obstacle_asset = self.gym.create_box(self.sim, 0.5, 0.5, 1.0, asset_options)
 
         # 定义障碍物的数量 (每个环境放几个)
-        num_obstacles = 2
+        num_obstacles = 5
 
         # 1. 先调用父类方法，创建地形、机器人 Actor 等
         super()._create_envs()
@@ -284,7 +299,7 @@ class RollRobotEnv(LeggedRobot):
         # 映射 [-1, 1] 到实际速度范围
         clip_actions = self.cfg.normalization.clip_actions
         # 上层输出也可能需要 clip 一下防止跑飞
-        actions = torch.clip(actions, -clip_actions, clip_actions)
+        # actions = torch.clip(actions, -clip_actions, clip_actions) #TODO 这里为了防止报错注释掉了，但是要看能不能再加回来，不要这一行会不会出问题
         
         # 写入 env.commands (这就是桥梁！)
         # 下层网络读取 obs_commands 时会读这里的数据
@@ -346,7 +361,7 @@ class RollRobotEnv(LeggedRobot):
         # --- 5. 计算上层网络的 Reward 和 Observation ---
         self.rew_buf[:] = 0. # 清空下层的 reward
         
-        robot_root_states = self.root_states[::self.actors_per_env]
+        robot_root_states = self.root_states[:self.num_envs]
         robot_pos = robot_root_states[:, 0:3]
         target_dist = torch.norm(self.target_pos - robot_pos, p=2, dim=-1)
         is_reached = target_dist < 0.5
@@ -360,7 +375,7 @@ class RollRobotEnv(LeggedRobot):
         
         # 2. 判断是否碰撞 (非脚部位受力 > 5.0N)
         # 5.0 是一个经验值，太小容易误判，太大容易漏判
-        collision_mask = torch.any(torch.norm(forces, dim=-1) > 5.0, dim=1)
+        collision_mask = torch.any(torch.norm(forces, dim=-1) > 20.0, dim=1)
         
         # 3. 如果碰撞，触发 Reset
         self.reset_buf |= collision_mask
@@ -374,7 +389,44 @@ class RollRobotEnv(LeggedRobot):
         # 获取上层观测（相机 + 目标）
         # self.obs_buf = self.compute_nav_observations() 
 
+        self.debug_draw()
+
         return self.obs_buf, self.obs_buf, self.rew_buf, self.reset_buf, self.extras
+    
+    def debug_draw(self):
+        # 如果不是 GUI 模式，直接返回
+        if self.headless: return
+
+        self.gym.clear_lines(self.viewer)
+        
+        # 只画第 0 个环境，省资源
+        i = 0
+        env = self.envs[i]
+        
+        # 1. 画出目标点 (Target) - 用一个垂直的大红线表示
+        target = self.target_pos[i].cpu().numpy()
+        p1 = gymapi.Vec3(target[0], target[1], 0.0)
+        p2 = gymapi.Vec3(target[0], target[1], 2.0)
+        # 红色
+        gymutil.draw_line(p1, p2, gymapi.Vec3(1, 0, 0), self.gym, self.viewer, env)
+        
+        # 2. 画出机器人感知的目标向量 (Local Target Vec)
+        # 这能验证 quat_rotate_inverse 是否正确
+        robot_pos = self.root_states[i, 0:3].cpu().numpy()
+        
+        # 从 obs_buf 里取出 Local Vector
+        # 注意：这里假设 obs 结构是 [Lidar(128), Target(3)]
+        target_vec_local = self.obs_buf[i, -3:].cpu().numpy()
+        
+        # 为了画出来，需要把它转回全局坐标 (这就相当于验证了逆变换)
+        # 但更简单的是：直接画一根从机器人出发，指向 Local Vector 指示方向的线
+        # 我们需要用机器人的朝向去旋转这个 Local Vector 才能在全局画出来...
+        # 这有点麻烦，不如直接画一条连接线验证逻辑：
+        
+        start = gymapi.Vec3(robot_pos[0], robot_pos[1], robot_pos[2])
+        end = gymapi.Vec3(target[0], target[1], target[2])
+        # 绿色连线：真实的物理连接
+        gymutil.draw_line(start, end, gymapi.Vec3(0, 1, 0), self.gym, self.viewer, env)
 
     def compute_nav_observations(self): 
         """
@@ -413,7 +465,7 @@ class RollRobotEnv(LeggedRobot):
 
         # 3. 计算目标向量 (Target Vector)
         # 获取机器人当前的全局位置
-        robot_root_states = self.root_states[::self.actors_per_env]
+        robot_root_states = self.root_states[:self.num_envs]
         robot_pos = robot_root_states[:, 0:3]
         robot_quat = robot_root_states[:, 3:7]
         
@@ -438,7 +490,7 @@ class RollRobotEnv(LeggedRobot):
 
     def compute_nav_reward(self): 
         # 1. 获取位置信息
-        robot_root_states = self.root_states[::self.actors_per_env]
+        robot_root_states = self.root_states[:self.num_envs]
         robot_pos = robot_root_states[:, 0:3]
         target_dist = torch.norm(self.target_pos - robot_pos, p=2, dim=-1)
 

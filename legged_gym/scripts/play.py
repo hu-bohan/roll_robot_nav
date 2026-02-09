@@ -106,10 +106,11 @@ def play(args):
         elif i==stop_state_log:
             logger.plot_states()
         if  0 < i < stop_rew_log:
-            if infos["episode"]:
-                num_episodes = torch.sum(env.reset_buf).item()
-                if num_episodes>0:
-                    logger.log_rewards(infos["episode"], num_episodes)
+            if "episode" in infos:
+                if infos["episode"]:
+                    num_episodes = torch.sum(env.reset_buf).item()
+                    if num_episodes>0:
+                        logger.log_rewards(infos["episode"], num_episodes)
         elif i==stop_rew_log:
             logger.print_rewards()
 
